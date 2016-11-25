@@ -40,7 +40,7 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     private function setUpDotEnv()
     {
-        (new Dotenv('../'))->load();
+        (new Dotenv(__DIR__ . '/../'))->load();
     }
 
     /**
