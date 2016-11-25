@@ -72,7 +72,7 @@ class AttributeCollection
         }
 
         if ($initial) {
-            $this->original = clone $this->attributes;
+            $this->original = $this->cloneAttributes();
         }
 
         return $this;
@@ -80,21 +80,20 @@ class AttributeCollection
 
     public function getDirty()
     {
-        $dirty = new AttributeCollection;
-
-        var_dump($this->attributes);
-        var_dump($this->original);
-        die();
+        $dirty = [];
 
         foreach ($this->attributes as $key => $value) {
             if ($value instanceof AttributeCollection) {
-                $dirty->$key = $value->getDirty();
+                $sub_dirty = $value->getDirty();
+
+                if(count($sub_dirty)) {
+                    $dirty[$key] = $sub_dirty;
+                }
             } else {
                 if (!property_exists($this->original, $key)) {
-                    var_dump($dirty);
-                    $dirty->$key = $value;
+                    $dirty[$key] = $value;
                 } elseif ($value != $this->original->$key) {
-                    $dirty->$key = $value;
+                    $dirty[$key] = $value;
                 }
             }
         }
@@ -109,5 +108,16 @@ class AttributeCollection
         }
 
         return null;
+    }
+
+    protected function cloneAttributes()
+    {
+        $cloned = new stdClass;
+
+        foreach($this->attributes as $key => $value) {
+            $cloned->$key = ($value instanceof AttributeCollection) ? $value->cloneAttributes() : $value;
+        }
+
+        return $cloned;
     }
 }

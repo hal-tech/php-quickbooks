@@ -57,18 +57,14 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
     {
         $response = $this->post($this->model, $attributes);
 
-        $this->fill($response->{$this->getApiModel()});
-
-        return $this;
+        return new static($this->client, $response->{$this->getApiModel()});
     }
 
     public function find(string $customer_id)
     {
         $response = $this->get($this->model, $customer_id);
 
-        $resource = new static($this->client, $response->{$this->getApiModel()});
-
-        return $resource;
+        return new static($this->client, $response->{$this->getApiModel()});
     }
 
     public function update(array $attributes)
@@ -78,15 +74,14 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
 
     public function save()
     {
-        $dirty = $this->getDirty()->toArray();
+        $dirty = $this->getDirty();
 
-        $attributes = array_merge(
-            $dirty,
-            [
+        $attributes = array_merge($dirty, [
+                'Id'        => $this->original->Id,
                 'sparse'    => true,
-                'SyncToken' => $this->attributes->SyncToken,
-            ]
-        );
+                'SyncToken' => $this->sync_token,
+            ]);
+
 
         $this->post('customer', $attributes);
 

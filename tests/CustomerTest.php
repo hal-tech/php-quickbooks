@@ -4,7 +4,7 @@ namespace Tests;
 
 use PhpQuickbooks\Customer;
 
-class QuickbooksTest extends TestCase
+class CustomerTest extends TestCase
 {
     /** @test */
     public function it_can_create_a_customer()
@@ -40,9 +40,6 @@ class QuickbooksTest extends TestCase
         $name1 = $this->faker->name;
         $name2 = $this->faker->name;
 
-        var_dump($name1);
-        var_dump($name2);
-
         // Create a customer
         $customer = $this->quickbooks->customer()->create([
             'DisplayName' => $name1,
@@ -55,7 +52,7 @@ class QuickbooksTest extends TestCase
         $customer = $this->quickbooks->customer()->find($customer->id);
 
         $this->assertInstanceOf(Customer::class, $customer);
-        $this->assertEquals($name, $customer->display_name);
+        $this->assertEquals($name2, $customer->display_name);
     }
 
     /** @test */
