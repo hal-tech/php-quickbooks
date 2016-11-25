@@ -3,13 +3,14 @@
 namespace PhpQuickbooks;
 
 use GuzzleHttp\Client;
+use stdClass;
 
 abstract class Resource implements ResourceInterface
 {
     /**
-     * @var array
+     * @var \stdClass
      */
-    protected $attributes = [];
+    protected $attributes = null;
 
     /**
      * @var \GuzzleHttp\Client
@@ -30,8 +31,8 @@ abstract class Resource implements ResourceInterface
     {
         $key = $this->camelCase($key);
 
-        if (key_exists($key, $this->attributes)) {
-            return $this->attributes[$key];
+        if (property_exists($this->attributes, $key)) {
+            return $this->attributes->$key;
         }
 
         return null;
@@ -39,8 +40,9 @@ abstract class Resource implements ResourceInterface
 
     public function __set($key, $value)
     {
-        if (key_exists($key, $this->attributes)) {
-            $this->attributes[$key] = $value;
+        if(property_exists($this->attributes, $key))
+        {
+            $this->attributes->$key = $value;
         }
     }
 
@@ -48,17 +50,17 @@ abstract class Resource implements ResourceInterface
     {
         $response = $this->client->post($resource_url, ['json' => $payload]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getBody()->getContents());
     }
 
     protected function get(string $resource_url, string $customer_id)
     {
         $response = $this->client->get($resource_url . '/' . $customer_id);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getBody()->getContents());
     }
 
-    protected function fill(array $data)
+    protected function fill(stdClass $data)
     {
         $this->attributes = $data;
     }
@@ -67,6 +69,4 @@ abstract class Resource implements ResourceInterface
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
     }
-
-
 }

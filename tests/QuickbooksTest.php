@@ -33,4 +33,21 @@ class QuickbooksTest extends TestCase
         $this->assertInstanceOf(Customer::class, $customer);
         $this->assertEquals($name, $customer->display_name);
     }
+
+    /** @test */
+    public function it_can_return_nested_attributes()
+    {
+        $name = $this->faker->name;
+
+        $customer = $this->quickbooks->customer()->create([
+            'DisplayName' => $name
+        ]);
+
+        $customer = $this->quickbooks->customer()->find($customer->id);
+
+        $value = $customer->currency_ref->value;
+
+        $this->assertTrue(is_string($value));
+        $this->assertEquals($value, 'GBP');
+    }
 }

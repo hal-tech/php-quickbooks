@@ -17,7 +17,7 @@ class Customer extends Resource
     {
         $response = $this->post('customer', $attributes);
 
-        $this->fill($response['Customer']);
+        $this->fill($response->Customer);
 
         return $this;
     }
@@ -26,7 +26,7 @@ class Customer extends Resource
     {
         $response = $this->get('customer', $customer_id);
 
-        $this->fill($response['Customer']);
+        $this->fill($response->Customer);
 
         return $this;
     }
