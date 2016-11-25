@@ -2,29 +2,33 @@
 
 namespace PhpQuickbooks;
 
-use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-
-class Customer implements Resource
+/**
+ * Class Customer
+ *
+ * @package PhpQuickbooks
+ *
+ * @property int    $id
+ * @property string $display_name
+ *
+ */
+class Customer extends Resource
 {
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    private $client;
-
-    /**
-     * Customer constructor.
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     public function create(array $attributes)
     {
-        $response = $this->client->post('customer', ['json' => $attributes]);
+        $response = $this->post('customer', $attributes);
 
-        var_dump(json_decode($response->getBody()->getContents(), true));
+        $this->fill($response['Customer']);
+
+        return $this;
     }
+
+    public function find(string $customer_id)
+    {
+        $response = $this->get('customer', $customer_id);
+
+        $this->fill($response['Customer']);
+
+        return $this;
+    }
+
 }
