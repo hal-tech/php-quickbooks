@@ -21,12 +21,10 @@ class Customer implements Resource
         $this->client = $client;
     }
 
-    public function create(array $attributes) : self
+    public function create(array $attributes)
     {
-        try {
-            $this->client->post('customer', ['json' => $attributes]);
-        } catch(GuzzleException $e) {
-            var_dump($e->getResponse()->getBody()->getContents());
-        }
+        $response = $this->client->post('customer', ['json' => $attributes]);
+
+        var_dump(json_decode($response->getBody()->getContents(), true));
     }
 }

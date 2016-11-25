@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Dotenv\Dotenv;
+use Faker\Factory;
 use PhpQuickbooks\Quickbooks;
 use PHPUnit_Framework_TestCase;
 
@@ -18,6 +19,9 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     protected $quickbooks;
 
+    /** @var  \Faker\Factory */
+    protected $faker;
+
     /**
      * Override the setup function to load environment variables
      * and load quickbooks object with tokens and keys.
@@ -28,6 +32,7 @@ class TestCase extends PHPUnit_Framework_TestCase
 
         $this->setUpDotEnv();
         $this->setUpQuickbooks();
+        $this->setUpFaker();
     }
 
     /**
@@ -51,5 +56,10 @@ class TestCase extends PHPUnit_Framework_TestCase
             getenv('QUICKBOOKS_CUSTOMER_ID'),
             'https://sandbox-quickbooks.api.intuit.com'
         );
+    }
+
+    protected function setUpFaker()
+    {
+        $this->faker = Factory::create();
     }
 }

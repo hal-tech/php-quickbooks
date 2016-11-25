@@ -20,6 +20,7 @@ if (!$oauth_token || !$oauth_verifier) {
 }
 
 $token = $oauth->getTokenCredentials($oauth_token, $oauth_verifier);
+var_dump($token);
 ?>
 <html>
 <head>
