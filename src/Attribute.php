@@ -12,6 +12,14 @@ class Attribute
     protected $attributes = null;
 
     /**
+     * Attribute constructor.
+     */
+    public function __construct()
+    {
+        $this->attributes = new stdClass();
+    }
+
+    /**
      * @param string $key
      *
      * @return string
@@ -33,20 +41,28 @@ class Attribute
         }
     }
 
-    protected function fill(stdClass $data)
+    public function toArray()
     {
-        foreach ($data as $key => $value) {
-            if($value instanceof stdClass) {
-                $data->$key = (new Attribute())->fill($value);
-            }
+        $array = [];
+
+        foreach ($this->attributes as $key => $value) {
+            $array[$key] = ($value instanceof Attribute) ? $value->toArray() : $value;
         }
 
-        $this->attributes = $data;
+        return $array;
+    }
+
+    protected function fill($data)
+    {
+        foreach ($data as $key => $value) {
+            $this->attributes->$key = ($value instanceof stdClass) ? (new Attribute())->fill($value) : $value;
+        }
 
         return $this;
     }
 
-    private function getAttribute($key) {
+    private function getAttribute($key)
+    {
         if (property_exists($this->attributes, $key)) {
             return $this->attributes->$key;
         }
