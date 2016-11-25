@@ -3,9 +3,8 @@
 namespace PhpQuickbooks;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
-abstract class Resource extends Attribute implements ResourceInterface
+abstract class Resource extends AttributeCollection implements ResourceInterface
 {
     /**
      * @var \GuzzleHttp\Client
@@ -18,13 +17,14 @@ abstract class Resource extends Attribute implements ResourceInterface
     protected $model = '';
 
     /**
-     * Customer constructor.
+     * Resource constructor.
      *
      * @param \GuzzleHttp\Client $client
+     * @param \stdClass|null     $attributes
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, \stdClass $attributes = null)
     {
-        parent::__construct();
+        parent::__construct($attributes);
 
         $this->client = $client;
     }
@@ -48,13 +48,9 @@ abstract class Resource extends Attribute implements ResourceInterface
 
     public function post(string $resource_url, array $payload)
     {
+        $response = $this->client->post($resource_url, ['json' => $payload]);
 
-        try {
-            $response = $this->client->post($resource_url, ['json' => $payload]);
-            return json_decode($response->getBody()->getContents());
-        } catch(RequestException $e) {
-            var_dump($e->getResponse()->getBody()->getContents());
-        }
+        return json_decode($response->getBody()->getContents());
     }
 
     public function create(array $attributes)
@@ -70,8 +66,7 @@ abstract class Resource extends Attribute implements ResourceInterface
     {
         $response = $this->get($this->model, $customer_id);
 
-        $resource = new static($this->client);
-        $resource->fill($response->{$this->getApiModel()});
+        $resource = new static($this->client, $response->{$this->getApiModel()});
 
         return $resource;
     }
@@ -83,8 +78,10 @@ abstract class Resource extends Attribute implements ResourceInterface
 
     public function save()
     {
+        $dirty = $this->getDirty()->toArray();
+
         $attributes = array_merge(
-            $this->toArray(),
+            $dirty,
             [
                 'sparse'    => true,
                 'SyncToken' => $this->attributes->SyncToken,

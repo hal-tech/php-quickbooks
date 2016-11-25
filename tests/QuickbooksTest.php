@@ -37,15 +37,19 @@ class QuickbooksTest extends TestCase
     /** @test */
     public function it_can_update_a_customer()
     {
+        $name1 = $this->faker->name;
+        $name2 = $this->faker->name;
+
+        var_dump($name1);
+        var_dump($name2);
+
         // Create a customer
         $customer = $this->quickbooks->customer()->create([
-            'DisplayName' => $this->faker->name,
+            'DisplayName' => $name1,
         ]);
 
-        $name = $this->faker->name;
-
         $customer->update([
-            'DisplayName' => $name
+            'DisplayName' => $name2
         ]);
 
         $customer = $this->quickbooks->customer()->find($customer->id);
