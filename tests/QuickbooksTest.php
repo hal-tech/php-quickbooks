@@ -35,6 +35,26 @@ class QuickbooksTest extends TestCase
     }
 
     /** @test */
+    public function it_can_update_a_customer()
+    {
+        // Create a customer
+        $customer = $this->quickbooks->customer()->create([
+            'DisplayName' => $this->faker->name,
+        ]);
+
+        $name = $this->faker->name;
+
+        $customer->update([
+            'DisplayName' => $name
+        ]);
+
+        $customer = $this->quickbooks->customer()->find($customer->id);
+
+        $this->assertInstanceOf(Customer::class, $customer);
+        $this->assertEquals($name, $customer->display_name);
+    }
+
+    /** @test */
     public function it_can_return_nested_attributes()
     {
         $name = $this->faker->name;

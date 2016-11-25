@@ -31,4 +31,18 @@ class Customer extends Resource
         return $this;
     }
 
+    public function update(array $attributes)
+    {
+        array_merge([
+            'sparse' => true,
+            'Id' => $this->attributes->Id,
+            'syncToken' => $this->attributes->SyncToken
+        ]);
+
+        $response = $this->post('customer', $attributes);
+
+        $this->fill($response->Customer);
+
+        return $this;
+    }
 }
