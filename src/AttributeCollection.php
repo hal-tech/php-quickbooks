@@ -32,19 +32,9 @@ class AttributeCollection
         $this->fill($attributes, true);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
-    protected function camelCase(string $key): string
-    {
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-    }
-
     public function __get($key)
     {
-        return $this->getAttribute($key) ?? $this->getAttribute($this->camelCase($key));
+        return $this->getAttribute($key) ?? $this->getAttribute(Text::camelCase($key));
     }
 
     public function __set($key, $value)
@@ -68,6 +58,8 @@ class AttributeCollection
     protected function fill($data, $initial = false)
     {
         foreach ($data as $key => $value) {
+            $key = Text::pascalCase($key);
+
             $this->attributes->$key = ($value instanceof stdClass) ? new AttributeCollection($value) : $value;
         }
 

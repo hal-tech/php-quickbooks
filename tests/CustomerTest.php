@@ -42,11 +42,11 @@ class CustomerTest extends TestCase
 
         // Create a customer
         $customer = $this->quickbooks->customer()->create([
-            'DisplayName' => $name1,
+            'display_name' => $name1,
         ]);
 
         $customer->update([
-            'DisplayName' => $name2
+            'display_name' => $name2
         ]);
 
         $customer = $this->quickbooks->customer()->find($customer->id);
