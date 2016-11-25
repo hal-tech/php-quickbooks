@@ -9,7 +9,7 @@ use GuzzleHttp\Subscriber\Oauth\Oauth1;
 class Quickbooks
 {
     /**
-     * @var GuzzleHttp\Client
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 

@@ -60,6 +60,6 @@ class TestCase extends PHPUnit_Framework_TestCase
 
     protected function setUpFaker()
     {
-        $this->faker = Factory::create();
+        $this->faker = Factory::create("en_GB");
     }
 }
