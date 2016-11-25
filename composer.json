@@ -4,7 +4,8 @@
   "license": "MIT",
   "require": {
     "guzzlehttp/guzzle": "^6.2",
-    "guzzlehttp/oauth-subscriber": "0.3.*"
+    "guzzlehttp/oauth-subscriber": "0.3.*",
+    "wheniwork/oauth1-intuit": "^0.1.1"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4",

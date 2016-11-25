@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c6cf69f9a1aff9811b9b187d590597be",
-    "content-hash": "d21466ab958f80d9258e8aba7d6f31a9",
+    "hash": "c20e374a13d82f699a9163a260a46cbb",
+    "content-hash": "93a9140239880bda60eea2af76f81435",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -230,6 +230,69 @@
             "time": "2016-06-24 23:00:38"
         },
         {
+            "name": "league/oauth1-client",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth1-client.git",
+                "reference": "fca5f160650cb74d23fc11aa570dd61f86dcf647"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth1-client/zipball/fca5f160650cb74d23fc11aa570dd61f86dcf647",
+                "reference": "fca5f160650cb74d23fc11aa570dd61f86dcf647",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9",
+                "phpunit/phpunit": "^4.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth1\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Corlett",
+                    "email": "bencorlett@me.com",
+                    "homepage": "http://www.webcomm.com.au",
+                    "role": "Developer"
+                }
+            ],
+            "description": "OAuth 1.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "bitbucket",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth1",
+                "single sign on",
+                "trello",
+                "tumblr",
+                "twitter"
+            ],
+            "time": "2016-08-17 00:36:58"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -278,6 +341,62 @@
                 "response"
             ],
             "time": "2016-08-06 14:39:51"
+        },
+        {
+            "name": "wheniwork/oauth1-intuit",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wheniwork/oauth1-intuit.git",
+                "reference": "3ad9f931075498cef08ffc7638e79b05451b5b60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wheniwork/oauth1-intuit/zipball/3ad9f931075498cef08ffc7638e79b05451b5b60",
+                "reference": "3ad9f931075498cef08ffc7638e79b05451b5b60",
+                "shasum": ""
+            },
+            "require": {
+                "league/oauth1-client": "~1.2",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wheniwork\\OAuth1\\Client\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Woody Gilk",
+                    "email": "woody.gilk@gmail.com",
+                    "homepage": "https://github.com/shadowhand"
+                },
+                {
+                    "name": "Daniel Olfelt",
+                    "email": "dolfelt@gmail.com",
+                    "homepage": "https://github.com/dolfelt"
+                }
+            ],
+            "description": "Intuit OAuth 1.0 Client Provider for The PHP League OAuth1-Client",
+            "keywords": [
+                "authorisation",
+                "authorization",
+                "client",
+                "intuit",
+                "oauth",
+                "oauth1",
+                "quickbooks"
+            ],
+            "time": "2015-07-30 16:38:50"
         }
     ],
     "packages-dev": [
