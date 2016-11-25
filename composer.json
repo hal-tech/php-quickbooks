@@ -1,0 +1,21 @@
+{
+  "name": "teampickr/php-quickbooks",
+  "description": "A guzzle client for the Quickbooks API",
+  "license": "MIT",
+  "require": {
+    "guzzlehttp/guzzle": "^6.2",
+    "guzzlehttp/oauth-subscriber": "0.3.*"
+  },
+  "require-dev": {
+    "vlucas/phpdotenv": "^2.4",
+    "phpunit/phpunit": "^5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "PhpQuickbooks\\": "src/"
+    },
+    "classmap": [
+      "tests/TestCase.php"
+    ]
+  }
+}
