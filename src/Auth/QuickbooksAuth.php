@@ -52,8 +52,6 @@ class QuickbooksAuth
     {
         $temporaryCredentials = unserialize($_SESSION['temporary_credentials']);
 
-        $tokenCredentials = $this->oauth->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
-
-        var_dump($tokenCredentials);
+        return $this->oauth->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
     }
 }
