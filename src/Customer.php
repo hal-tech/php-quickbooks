@@ -13,5 +13,10 @@ namespace PhpQuickbooks;
  */
 class Customer extends Resource
 {
-    protected $model = 'customer';
+    /**
+     * Quickbooks Model
+     *
+     * @var string
+     */
+    protected $model = 'Customer';
 }

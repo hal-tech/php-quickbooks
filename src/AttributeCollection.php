@@ -29,7 +29,7 @@ class AttributeCollection
             $attributes = new stdClass();
         }
 
-        $this->fill($attributes, true);
+        $this->fill($attributes)->resetOriginal();
     }
 
     public function __get($key)
@@ -44,6 +44,11 @@ class AttributeCollection
         }
     }
 
+    /**
+     * Converts the collection to an array
+     *
+     * @return array
+     */
     public function toArray()
     {
         $array = [];
@@ -55,7 +60,18 @@ class AttributeCollection
         return $array;
     }
 
-    protected function fill($data, $initial = false)
+    /**
+     * Fills the collection with data.
+     *
+     * Keys will always be converted to PascalCase unless
+     * specified in the ignore list within the Text helper
+     * class.
+     *
+     * @param array|stdClass $data
+     *
+     * @return $this
+     */
+    protected function fill($data)
     {
         foreach ($data as $key => $value) {
             $key = Text::pascalCase($key);
@@ -63,13 +79,26 @@ class AttributeCollection
             $this->attributes->$key = ($value instanceof stdClass) ? new AttributeCollection($value) : $value;
         }
 
-        if ($initial) {
-            $this->original = $this->cloneAttributes();
-        }
+        return $this;
+    }
+
+    /**
+     * Resets the original property to forget any dirty properties.
+     *
+     * @return $this
+     */
+    public function resetOriginal()
+    {
+        $this->original = $this->cloneAttributes();
 
         return $this;
     }
 
+    /**
+     * Gets an array of any values that have changed since the model was created.
+     *
+     * @return array
+     */
     public function getDirty()
     {
         $dirty = [];
@@ -78,7 +107,7 @@ class AttributeCollection
             if ($value instanceof AttributeCollection) {
                 $sub_dirty = $value->getDirty();
 
-                if(count($sub_dirty)) {
+                if (count($sub_dirty)) {
                     $dirty[$key] = $sub_dirty;
                 }
             } else {
@@ -93,6 +122,13 @@ class AttributeCollection
         return $dirty;
     }
 
+    /**
+     * Attempts to find an attribute and return it.
+     *
+     * @param $key
+     *
+     * @return mixed
+     */
     private function getAttribute($key)
     {
         if (property_exists($this->attributes, $key)) {
@@ -102,11 +138,16 @@ class AttributeCollection
         return null;
     }
 
+    /**
+     * Clones the attributes. Because it is an object it will create a reference without this.
+     *
+     * @return \stdClass
+     */
     protected function cloneAttributes()
     {
         $cloned = new stdClass;
 
-        foreach($this->attributes as $key => $value) {
+        foreach ($this->attributes as $key => $value) {
             $cloned->$key = ($value instanceof AttributeCollection) ? $value->cloneAttributes() : $value;
         }
 
