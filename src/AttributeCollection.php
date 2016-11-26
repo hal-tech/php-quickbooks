@@ -76,7 +76,13 @@ class AttributeCollection
         foreach ($data as $key => $value) {
             $key = Text::pascalCase($key);
 
-            $this->attributes->$key = ($value instanceof stdClass) ? new AttributeCollection($value) : $value;
+            if($value instanceof stdClass) {
+                $this->attributes->$key = new AttributeCollection($value);
+            } elseif(is_array($value)) {
+                $this->attributes->$key = (new AttributeCollection())->fill($value);
+            } else {
+                $this->attributes->$key = $value;
+            }
         }
 
         return $this;

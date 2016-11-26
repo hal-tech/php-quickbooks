@@ -46,7 +46,10 @@ class CustomerTest extends TestCase
         ]);
 
         $customer->update([
-            'display_name' => $name2
+            'display_name' => $name2,
+            'bill_addr'    => [
+                'country_sub_division_code' => 'Suffolk',
+            ],
         ]);
 
         $customer = $this->quickbooks->customer()->find($customer->id);

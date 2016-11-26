@@ -123,7 +123,9 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
 
     public function update(array $attributes)
     {
-        return $this->fill($attributes)->save();
+        $this->fill($attributes);
+
+        return $this->save();
     }
 
     public function save()
