@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Tests\Resources\NameList;
 
-use PhpQuickbooks\Customer;
+use PhpQuickbooks\Resources\NameList\Customer;
+use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {

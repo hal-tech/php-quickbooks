@@ -5,6 +5,11 @@ namespace PhpQuickbooks;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
+use PhpQuickbooks\Resources\NameList\Customer;
+use PhpQuickbooks\Resources\NameList\Department;
+use PhpQuickbooks\Resources\NameList\Item;
+use PhpQuickbooks\Resources\NameList\TaxCode;
+use PhpQuickbooks\Resources\Transaction\Invoice;
 
 class Quickbooks
 {
@@ -46,10 +51,10 @@ class Quickbooks
         $stack = HandlerStack::create();
 
         $middleware = new Oauth1([
-            'consumer_key' => $key,
+            'consumer_key'    => $key,
             'consumer_secret' => $secret,
-            'token' => $token,
-            'token_secret' => $token_secret,
+            'token'           => $token,
+            'token_secret'    => $token_secret,
         ]);
 
         $stack->push($middleware);
@@ -71,8 +76,40 @@ class Quickbooks
         ]);
     }
 
+    /**
+     * @return \PhpQuickbooks\Resources\NameList\Customer
+     */
     public function customer()
     {
         return new Customer($this->client);
+    }
+
+    /**
+     * @return \PhpQuickbooks\Resources\NameList\Department
+     */
+    public function department()
+    {
+        return new Department($this->client);
+    }
+
+    /**
+     * @return \PhpQuickbooks\Resources\NameList\Item
+     */
+    public function item()
+    {
+        return new Item($this->client);
+    }
+
+    public function taxCode()
+    {
+        return new TaxCode($this->client);
+    }
+
+    /**
+     * @return \PhpQuickbooks\Resources\Transaction\Invoice
+     */
+    public function invoice()
+    {
+        return new Invoice($this->client);
     }
 }

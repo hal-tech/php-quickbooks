@@ -1,6 +1,8 @@
 <?php
 
-namespace PhpQuickbooks;
+namespace PhpQuickbooks\Resources\NameList;
+
+use PhpQuickbooks\Resources\Resource;
 
 /**
  * Class Customer

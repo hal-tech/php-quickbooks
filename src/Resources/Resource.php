@@ -1,8 +1,14 @@
 <?php
 
-namespace PhpQuickbooks;
+namespace PhpQuickbooks\Resources;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Collection;
+use PhpQuickbooks\AttributeCollection;
+use PhpQuickbooks\Exceptions\QuickbooksRequestException;
+use PhpQuickbooks\Query\Builder;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class Resource extends AttributeCollection implements ResourceInterface
 {
@@ -64,9 +70,9 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
      */
     protected function get(string $resource_url, string $resource_id)
     {
-        $response = $this->client->get($resource_url . '/' . $resource_id);
-
-        return json_decode($response->getBody()->getContents());
+        return $this->request(function () use ($resource_url, $resource_id) {
+            return $this->client->get($resource_url . '/' . $resource_id);
+        });
     }
 
     /**
@@ -79,9 +85,52 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
      */
     public function post(string $resource_url, array $payload)
     {
-        $response = $this->client->post($resource_url, ['json' => $payload]);
+        return $this->request(function () use ($resource_url, $payload) {
+            return $this->client->post($resource_url, ['json' => $payload]);
+        });
+    }
 
-        return json_decode($response->getBody()->getContents());
+    /**
+     * Find a resource via the Quickbooks API.
+     *
+     * @param string $customer_id
+     *
+     * @return static
+     */
+    public function find(string $customer_id)
+    {
+        $response = $this->get($this->getUrl(), $customer_id);
+
+        return new static($this->client, $response->{$this->getModel()});
+    }
+
+    /**
+     * @return \PhpQuickbooks\Query\Builder
+     */
+    public function query()
+    {
+        return new Builder($this);
+    }
+
+    /**
+     * @param \PhpQuickbooks\Query\Builder $builder
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function runQuery(Builder $builder): Collection
+    {
+        $response = $this->request(function () use ($builder) {
+            return $this->client->post(
+                'query',
+                ['query' => 'query=' . $builder->build()]
+            );
+        });
+
+        $collection = new Collection($response->QueryResponse->{$this->getModel()});
+
+        return $collection->map(function (\stdClass $resource) {
+           return (new static($this->client))->fill($resource)->resetOriginal();
+        });
     }
 
     /**
@@ -89,7 +138,7 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
      *
      * @param array $attributes
      *
-     * @return mixed
+     * @return static
      */
     public function create(array $attributes)
     {
@@ -114,13 +163,13 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
         return $instance->fill($response->{$this->getModel()})->resetOriginal();
     }
 
-    public function find(string $customer_id)
-    {
-        $response = $this->get($this->getUrl(), $customer_id);
-
-        return new static($this->client, $response->{$this->getModel()});
-    }
-
+    /**
+     * Update attributes and then saves them to the API.
+     *
+     * @param array $attributes
+     *
+     * @return \PhpQuickbooks\Resources\Resource
+     */
     public function update(array $attributes)
     {
         $this->fill($attributes);
@@ -138,8 +187,22 @@ abstract class Resource extends AttributeCollection implements ResourceInterface
             'SyncToken' => $this->sync_token,
         ]);
 
-        $this->post('customer', $attributes);
+        $this->post($this->getUrl(), $attributes);
 
         return $this;
+    }
+
+    protected function request(\Closure $closure)
+    {
+        try {
+            return $this->parseResponse($closure());
+        } catch (RequestException $e) {
+            throw new QuickbooksRequestException($e->getResponse());
+        }
+    }
+
+    protected function parseResponse(ResponseInterface $response)
+    {
+        return json_decode($response->getBody()->getContents());
     }
 }

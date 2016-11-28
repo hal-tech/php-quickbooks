@@ -128,6 +128,11 @@ class AttributeCollection
         return $dirty;
     }
 
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
     /**
      * Attempts to find an attribute and return it.
      *
