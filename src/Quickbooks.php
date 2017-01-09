@@ -9,6 +9,7 @@ use PhpQuickbooks\Resources\NameList\Customer;
 use PhpQuickbooks\Resources\NameList\Department;
 use PhpQuickbooks\Resources\NameList\Item;
 use PhpQuickbooks\Resources\NameList\TaxCode;
+use PhpQuickbooks\Resources\NameList\Vendor;
 use PhpQuickbooks\Resources\Transaction\Invoice;
 
 class Quickbooks
@@ -82,6 +83,14 @@ class Quickbooks
     public function customer()
     {
         return new Customer($this->client);
+    }
+
+    /**
+     * @return \PhpQuickbooks\Resources\NameList\Vendor
+     */
+    public function vendor()
+    {
+        return new Vendor($this->client);
     }
 
     /**
