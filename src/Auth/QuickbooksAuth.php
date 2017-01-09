@@ -21,10 +21,19 @@ class QuickbooksAuth
      */
     protected $consumer_secret;
 
-    public function __construct(string $consumer_key, string $consumer_secret)
-    {
+    /**
+     * @var string
+     */
+    protected $callback;
+
+    public function __construct(
+        string $consumer_key,
+        string $consumer_secret,
+        $callback = 'http://localhost:8080/auth/authorize_callback.php'
+    ) {
         $this->consumer_key = $consumer_key;
         $this->consumer_secret = $consumer_secret;
+        $this->callback = $callback;
 
         $this->initServer();
     }
@@ -34,7 +43,7 @@ class QuickbooksAuth
         $this->oauth = new Intuit([
             'identifier'   => $this->consumer_key,
             'secret'       => $this->consumer_secret,
-            'callback_uri' => 'http://localhost:8080/auth/authorize_callback.php',
+            'callback_uri' => $this->callback
         ]);
     }
 
